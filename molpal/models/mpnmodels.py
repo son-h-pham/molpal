@@ -238,7 +238,7 @@ class MPNN:
                 self.use_gpu,
                 True,
             )
-            for smis in batches(smis, 20000)
+            for smis in batches(smis, 1000000)
         ]
         Y_pred_batches = [ray.get(r) for r in tqdm(refs, "Prediction", unit="batch", leave=False)]
         Y_pred = np.concatenate(Y_pred_batches)
