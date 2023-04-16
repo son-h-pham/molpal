@@ -73,7 +73,8 @@ def predict(
 
     Y_pred = torch.cat(Y_pred_batches)
     Y_pred = Y_pred.cpu().numpy()
-
+    
+    del model
     # if uncertainty == "mve":
     #     if scaler:
     #         Y_pred[:, 0::2] *= scaler.stds
