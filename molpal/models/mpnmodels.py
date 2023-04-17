@@ -249,7 +249,7 @@ class MPNN:
                 Y_pred[:, 1::2] *= self.scaler.stds**2
             else:
                 Y_pred = Y_pred * self.scaler.stds + self.scaler.means
-
+        torch.cuda.empty_cache()
         return Y_pred
 
     def save(self, path) -> str:
