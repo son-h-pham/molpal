@@ -253,7 +253,8 @@ class MPNN:
             else:
                 Y_pred = Y_pred * self.scaler.stds + self.scaler.means
         torch.cuda.empty_cache()
-        subprocess.run("nvidia-smi | grep 'ray::IDLE' | grep -v grep | awk '{print $5}' | xargs kill -9".split(), shell=True)
+        subprocess_command = "nvidia-smi | grep 'ray::IDLE' | grep -v grep | awk '{print $5}' | xargs kill -9"
+        subprocess.run(subprocess_command.split(), shell=True)
         return Y_pred
 
     def save(self, path) -> str:
