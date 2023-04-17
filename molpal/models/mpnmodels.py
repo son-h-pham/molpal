@@ -2,6 +2,7 @@
 model"""
 from __future__ import annotations
 
+import os
 import subprocess
 
 from functools import partial
@@ -252,7 +253,7 @@ class MPNN:
             else:
                 Y_pred = Y_pred * self.scaler.stds + self.scaler.means
         torch.cuda.empty_cache()
-        subprocess("nvidia-smi | grep 'ray::IDLE' | grep -v grep | awk '{print $5}' | xargs kill -9".split(), shell=True)
+        subprocess.run("nvidia-smi | grep 'ray::IDLE' | grep -v grep | awk '{print $5}' | xargs kill -9".split(), shell=True)
         return Y_pred
 
     def save(self, path) -> str:
