@@ -2,6 +2,8 @@
 model"""
 from __future__ import annotations
 
+import subprocess
+
 from functools import partial
 import json
 import logging
@@ -238,7 +240,7 @@ class MPNN:
                 self.use_gpu,
                 True,
             )
-            for smis in batches(smis, 100000)
+            for smis in batches(smis, 500000)
         ]
         Y_pred_batches = [ray.get(r) for r in tqdm(refs, "Prediction", unit="batch", leave=False)]
         Y_pred = np.concatenate(Y_pred_batches)
@@ -250,6 +252,7 @@ class MPNN:
             else:
                 Y_pred = Y_pred * self.scaler.stds + self.scaler.means
         torch.cuda.empty_cache()
+        subprocess("nvidia-smi | grep 'ray::IDLE' | grep -v grep | awk '{print $5}' | xargs kill -9".split(), shell=True)
         return Y_pred
 
     def save(self, path) -> str:
